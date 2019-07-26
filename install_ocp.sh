@@ -692,7 +692,7 @@ deploy_camel_k_operator() {
     return
   fi
 
-  $kamel install --skip-cluster-setup --repository $MAVEN_REPOSITORY --base-image $REGISTRY/$REPOSITORY/fuse-java-openshift:$JAVA_BASE_IMAGE_TAG --context jvm $extra_opts
+  $kamel install --skip-cluster-setup --maven-repository $MAVEN_REPOSITORY --base-image $REGISTRY/$REPOSITORY/fuse-java-openshift:$JAVA_BASE_IMAGE_TAG --context jvm $extra_opts
 
   if [ -z "$version" ]; then
     # Patching Camel K image
@@ -816,7 +816,7 @@ get_product_camel_k_bin() {
   fi
 
   set +e
-  docker run -v $tmp_dir/:/client \
+  docker run -u root -v $tmp_dir/:/client \
                  --entrypoint bash \
                  $REGISTRY/$REPOSITORY/fuse-camel-k:$CAMEL_K_TAG\
                  -c "tar xf /opt/clients/camel-k-client-$os.tar.gz; cp kamel /client/" >$ERROR_FILE 2>&1
